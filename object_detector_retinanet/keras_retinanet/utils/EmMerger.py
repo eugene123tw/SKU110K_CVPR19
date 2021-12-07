@@ -314,7 +314,7 @@ class DuplicateMerger(object):
         box_height = y2 - y1
         original_detection_centers_x = x1 + box_width / 2.
         original_detection_centers_y = y1 + box_height / 2.
-        original_detection_centers = original_detection_centers_x.to_frame('x').join(
+        original_detection = original_detection_centers_x.to_frame('x').join(
             original_detection_centers_y.to_frame('y'))
 
         boxes = x1.to_frame('x1').join(x2.to_frame('x2')).join(
@@ -333,19 +333,19 @@ class DuplicateMerger(object):
         box_height = boxes.y2 - boxes.y1
         confidence = data['confidence']
 
-        original_detection_centers = original_detection_centers.join(
+        original_detection = original_detection.join(
             boxes.x1.to_frame('left_x'))
-        original_detection_centers = original_detection_centers.join(
+        original_detection = original_detection.join(
             boxes.x2.to_frame('right_x'))
-        original_detection_centers = original_detection_centers.join(
+        original_detection = original_detection.join(
             boxes.y1.to_frame('top_y'))
-        original_detection_centers = original_detection_centers.join(
+        original_detection = original_detection.join(
             boxes.y2.to_frame('bottom_y'))
-        original_detection_centers = original_detection_centers.join(
+        original_detection = original_detection.join(
             (box_width / 2.).to_frame('sigma_x'))
-        original_detection_centers = original_detection_centers.join(
+        original_detection = original_detection.join(
             (box_height / 2.).to_frame('sigma_y'))
-        original_detection_centers = original_detection_centers.join(
+        original_detection = original_detection.join(
             confidence.to_frame('confidence'))
 
         confidence = numpy.array(confidence)
@@ -384,7 +384,7 @@ class DuplicateMerger(object):
         if compression_factor > 1:
             heat_map += numpy.expand_dims(
                 cv2.resize(small_heat_map, (orig_shape[1], orig_shape[0])), axis=2)
-        return original_detection_centers
+        return original_detection
 
     def map_original_boxes_to_new_boxes(self, candidates, original_detection_centers):
         x = original_detection_centers['x']
