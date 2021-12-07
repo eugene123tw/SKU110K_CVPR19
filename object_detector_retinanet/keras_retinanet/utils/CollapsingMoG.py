@@ -137,6 +137,10 @@ def collapse(original_detection, k, offset, max_iter=100, epsilon=1e-100):
 
 
 def e_step(alpha, beta, covariance, covariance_prime, mu, mu_prime, min_kl_cache):
+    """ The E-step assigns each box to the nearest box cluster, 
+    where box similarity is defined by a KL distance between 
+    the corresponding Gaussians. 
+    """
     clusters = {}
     clusters_inv = {}
     for t, (alpha_, mu_, cov_) in enumerate(zip(alpha, mu, covariance)):
